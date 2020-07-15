@@ -13,6 +13,9 @@ def order_create(request):
         form = OrderCreateForm(request.POST)
         if form.is_valid():
             order = form.save()
+            if cart.coupon:
+                order.coupon = cart.coupon
+                order.discount = cart.coupon.discount
             for item in cart:
                 OrderItem.objects.create(order=order,
                                         product=item['product'],
@@ -47,7 +50,5 @@ def admin_order_pdf(request, order_id):
                             {'order': order})
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'filename=order_{}.pdf"'.format(order.id)
-    weasyprint.HTML(string=html).write_pdf(response,
-        stylesheets=[weasyprint.CSS(
-            settings.STATIC_ROOT + 'css/pdf.css')])
+    # weasyprint.HTML(string=html).write_pdf(response,stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + 'css/pdf.css')])
     return response

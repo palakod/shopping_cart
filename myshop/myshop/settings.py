@@ -41,11 +41,16 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
     'payment.apps.PaymentConfig',
+    'coupons.apps.CouponsConfig',
+    'rosetta',
+    'parler',
+    'localflavor',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -146,3 +151,29 @@ Configuration.configure(
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale/s'),
+)
+
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGES = (
+    ('en', 'English'),
+    ('es', 'Spanish')
+)
+
+PARLER_LANGUAGES = {
+    None: (
+        {'code': 'en'},
+        {'code': 'es'},
+    ),
+    'default' : {
+        'fallback': 'en',
+        'hide_untranslated': False,
+    }
+}
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 1
